@@ -45,7 +45,7 @@ import java.net.URL;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 /**
- *
+ * Basic EJB container integration tests
  */
 public class EjbTest extends Arquillian {
 
@@ -71,9 +71,10 @@ public class EjbTest extends Arquillian {
             .create(WebArchive.class, "EjbTest.war")
             .addAsResource(publicKey, "/publicKey.pem")
             .addClass(EjbEndpoint.class)
+            .addClass(IService.class)
+            .addClass(ServiceEJB.class)
             .addClass(TCKApplication.class)
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-            .addAsWebInfResource("WEB-INF/web.xml", "web.xml")
             ;
         System.out.printf("WebArchive: %s\n", webArchive.toString(true));
         return webArchive;
@@ -81,7 +82,7 @@ public class EjbTest extends Arquillian {
 
     @BeforeClass(alwaysRun = true)
     public static void generateToken() throws Exception {
-        token = TokenUtils.generateTokenString("/RolesEndpoint.json");
+        token = TokenUtils.generateTokenString("/Token1.json");
     }
 
     @RunAsClient
